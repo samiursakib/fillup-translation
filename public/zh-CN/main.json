@@ -1,0 +1,12 @@
+{
+  "init_project": "启动一个新项目。",
+  "clone_repo": "克隆仓库到您的电脑。",
+  "create_branch": "为您的工作创建一个新分支。",
+  "commit_changes": "提交更改并附带消息。",
+  "push_code": "将代码推送到 GitHub。",
+  "open_pr": "创建拉取请求，请求将您的工作合并到主分支。",
+  "fix_bug": "查找并修复代码中的问题。",
+  "run_tests": "检查代码是否正常运行。",
+  "deploy_app": "将应用程序部署上线。",
+  "update_readme": "更新 README 文件，添加信息。"
+}

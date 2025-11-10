@@ -1,0 +1,3 @@
+{REQUIRED_KEY_VALUE_PAIRS}
+
+Translate the values in the following JSON to "LANGUAGE_CODE". The keys must remain exactly the same. The final output must be ONLY a valid, single-level JSON object. DO NOT include any surrounding text, explanations, or markdown fences.

@@ -1,5 +1,12 @@
 {
-  "key1": "val1",
-  "key2": "val2",
-  "key3": "val3"
+  "init_project": "新しいプロジェクトを開始する。",
+  "clone_repo": "リポジトリをコンピュータにコピーする。",
+  "create_branch": "作業用の新しいブランチを作成する。",
+  "commit_changes": "メッセージを付けて作業を保存する。",
+  "push_code": "コードをGitHubにアップロードする。",
+  "open_pr": "作業をmainにマージするよう依頼する。",
+  "fix_bug": "コード内の問題を見つけて修正する。",
+  "run_tests": "コードが正常に動作するか確認する。",
+  "deploy_app": "アプリをオンラインにデプロイする。",
+  "update_readme": "READMEファイルに情報を追加する。"
 }
