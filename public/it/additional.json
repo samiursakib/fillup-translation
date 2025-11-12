@@ -1,0 +1,7 @@
+{
+  "open_pr": "Chiedi di unire il tuo lavoro nel ramo principale",
+  "fix_bug": "Trova e correggi il problema nel codice",
+  "run_tests": "Verifica che il codice funzioni correttamente",
+  "deploy_app": "Metti l'applicazione online",
+  "update_readme": "Aggiungi informazioni al file README"
+}

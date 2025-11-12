@@ -1,12 +1,7 @@
 {
-  "init_project": "Ein neues Projekt starten.",
-  "clone_repo": "Das Repository auf deinen Computer kopieren.",
-  "create_branch": "Einen neuen Branch für deine Arbeit erstellen.",
-  "commit_changes": "Deine Arbeit mit einer Nachricht speichern.",
-  "push_code": "Deinen Code auf GitHub hochladen.",
-  "open_pr": "Bitten deine Arbeit in den Main-Branch zu mergen.",
-  "fix_bug": "Das Problem im Code finden und beheben.",
-  "run_tests": "Prüfen ob der Code gut funktioniert.",
-  "deploy_app": "Die App online stellen.",
-  "update_readme": "Informationen zur README-Datei hinzufügen."
+  "init_project": "Ein neues Projekt starten",
+  "clone_repo": "Das Repository auf Ihren Computer kopieren",
+  "create_branch": "Einen neuen Branch für Ihre Arbeit erstellen",
+  "commit_changes": "Ihre Arbeit mit einer Nachricht speichern",
+  "push_code": "Ihren Code auf GitHub hochladen"
 }

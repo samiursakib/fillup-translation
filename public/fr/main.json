@@ -1,12 +1,7 @@
 {
-  "init_project": "Démarrer un nouveau projet.",
-  "clone_repo": "Copier le dépôt sur votre ordinateur.",
-  "create_branch": "Créer une nouvelle branche pour votre travail.",
-  "commit_changes": "Enregistrer votre travail avec un message.",
-  "push_code": "Télécharger votre code sur GitHub.",
-  "open_pr": "Demander la fusion de votre travail dans main.",
-  "fix_bug": "Trouver et corriger le problème dans le code.",
-  "run_tests": "Vérifier si le code fonctionne correctement.",
-  "deploy_app": "Mettre l'application en ligne.",
-  "update_readme": "Ajouter des informations au fichier README."
+  "init_project": "Démarrer un nouveau projet",
+  "clone_repo": "Copier le dépôt sur votre ordinateur",
+  "create_branch": "Créer une nouvelle branche pour votre travail",
+  "commit_changes": "Enregistrer votre travail avec un message",
+  "push_code": "Télécharger votre code sur GitHub"
 }

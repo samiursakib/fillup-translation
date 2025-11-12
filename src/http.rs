@@ -1,5 +1,4 @@
 use std::{env};
-
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize)]
@@ -55,7 +54,8 @@ pub async fn post_call(prompt: String) -> Result<String, reqwest::Error> {
     .header("x-goog-api-key", gemini_api_key)
     .json(&body)
     .send()
-    .await?;
+    .await?
+    .error_for_status()?;
   // println!("{:?}", response);
 
   let result: GeminiResponse = response.json().await?;
@@ -64,5 +64,6 @@ pub async fn post_call(prompt: String) -> Result<String, reqwest::Error> {
     .map(|p| p.text.clone())
     .unwrap_or_else(|| String::new());
 
+  // println!("\napi response: {:?}", answer);
   Ok(answer)
 }

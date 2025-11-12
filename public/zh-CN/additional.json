@@ -1,0 +1,7 @@
+{
+  "open_pr": "请求将你的工作合并到主分支",
+  "fix_bug": "查找并修复代码中的问题",
+  "run_tests": "检查代码是否正常工作",
+  "deploy_app": "将应用部署上线",
+  "update_readme": "将信息添加到README文件"
+}

@@ -1,0 +1,7 @@
+{
+  "open_pr": "開啟PR，要求將您的工作合併到主分支",
+  "fix_bug": "找出並修正程式碼中的問題",
+  "run_tests": "檢查程式碼是否正常運作",
+  "deploy_app": "部署應用程式",
+  "update_readme": "新增資訊到README檔案"
+}

@@ -1,0 +1,7 @@
+{
+  "open_pr": "Ask to merge your work into main",
+  "fix_bug": "Find and fix the issue in the code",
+  "run_tests": "Check if the code works well",
+  "deploy_app": "Put the app online",
+  "update_readme": "Add info to the README file"
+}

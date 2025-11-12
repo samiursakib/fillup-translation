@@ -1,0 +1,7 @@
+{
+  "open_pr": "Demander la fusion de votre travail dans main",
+  "fix_bug": "Trouver et corriger le problème dans le code",
+  "run_tests": "Exécuter les tests",
+  "deploy_app": "Déployer l'application",
+  "update_readme": "Mettre à jour le fichier README"
+}

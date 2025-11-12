@@ -1,0 +1,7 @@
+{
+  "open_pr": "Bitte darum, deine Arbeit in den Hauptzweig zu mergen",
+  "fix_bug": "Finde und behebe das Problem im Code",
+  "run_tests": "Prüfe, ob der Code einwandfrei funktioniert",
+  "deploy_app": "Stelle die App online",
+  "update_readme": "Füge Informationen zur README-Datei hinzu"
+}

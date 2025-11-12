@@ -1,12 +1,7 @@
 {
-  "init_project": "開始一個新專案。",
-  "clone_repo": "將儲存庫複製到你的電腦。",
-  "create_branch": "為你的工作建立一個新分支。",
-  "commit_changes": "儲存您的工作並附上訊息。",
-  "push_code": "將你的程式碼上傳到 GitHub。",
-  "open_pr": "請求將你的工作合併到主分支。",
-  "fix_bug": "在程式碼中找到並修復問題。",
-  "run_tests": "檢查程式碼是否運作良好。",
-  "deploy_app": "將應用程式上線。",
-  "update_readme": "將資訊新增到 README 檔案。"
+  "init_project": "開始一個新專案",
+  "clone_repo": "將儲存庫複製到您的電腦",
+  "create_branch": "為您的工作建立一個新分支",
+  "commit_changes": "儲存您的工作並附上訊息",
+  "push_code": "將您的程式碼上傳到 GitHub"
 }
