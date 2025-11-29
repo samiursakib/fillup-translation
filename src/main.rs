@@ -11,7 +11,11 @@ async fn main() {
   let parsed_cli = cli::Cli::parse();
 
   dotenv::dotenv().ok();
-  let root_dir = parsed_cli.root_dir;
+  let mut root_dir = parsed_cli.root_dir;
+  let root_path_buf = Path::new(&root_dir).to_path_buf();
+  if let Ok(abs_path) = root_path_buf.canonicalize() {
+    root_dir = abs_path.to_string_lossy().into_owned();
+  }
   let lan_code = parsed_cli.lan_code.unwrap_or_else(|| String::from("en"));
   let file_names = parsed_cli.file.unwrap_or_else(|| {
     let values = match fs::read_dir(format!("{}/{}", root_dir, lan_code)) {
@@ -22,7 +26,8 @@ async fn main() {
   });
   let indentation_number = parsed_cli.indent.unwrap_or_else(|| 4);
   let sleep_time_in_second = parsed_cli.sleep.unwrap_or_else(|| 0);
-  let prompt_filepath = "src/prompt_format.txt";
+  let prompt_ref = &include_str!("./prompt_format.txt");
+  let prompt = prompt_ref.to_string();
   // println!("{lan_code:?} {file_names:?} {root_dir:?} {indentation_number:?}");
 
   let root_dir_path = Path::new(&root_dir);
@@ -60,14 +65,6 @@ async fn main() {
         Err(_) => { vec![] }
       };
       // println!("filepaths_to_modify {:#?}", filepaths_to_modify);
-
-      let prompt = match fs::read_to_string(prompt_filepath) {
-        Ok(val) => val,
-        Err(err) => {
-          eprintln!("{:?}", err);
-          String::new()
-        }
-      };
 
       for path in filepaths_to_modify {
         let dir_name = match Path::new(&path).parent() {
@@ -115,8 +112,8 @@ async fn main() {
         let result = http::post_call(formatted_prompt).await;
         let dictionary = match helper::parse_json_response_as_hashmap(result) {
           Ok(val) => val,
-          Err(_) => {
-            eprintln!("Failed to translate");
+          Err(e) => {
+            eprintln!("Failed to translate: {:?}", e);
             failed_task_count = failed_task_count + 1;
             continue;
           }
