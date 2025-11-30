@@ -13,7 +13,7 @@ pub async fn post_method(required_paris: Vec<String>, dir_name: String) -> Resul
     dir_name: dir_name,
   };
   println!("client payload: {body:#?}");
-  let response = client.post("http://localhost:4000")
+  let response = client.post("https://fillup-translation.onrender.com")
     .json(&body)
     .send()
     .await?;
