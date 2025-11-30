@@ -10,7 +10,6 @@ use tokio::time::{sleep};
 async fn main() {
   let parsed_cli = cli::Cli::parse();
 
-  dotenv::dotenv().ok();
   let mut root_dir = parsed_cli.root_dir;
   let root_path_buf = Path::new(&root_dir).to_path_buf();
   if let Ok(abs_path) = root_path_buf.canonicalize() {
@@ -26,8 +25,7 @@ async fn main() {
   });
   let indentation_number = parsed_cli.indent.unwrap_or_else(|| 4);
   let sleep_time_in_second = parsed_cli.sleep.unwrap_or_else(|| 0);
-  let prompt_ref = &include_str!("./prompt_format.txt");
-  let prompt = prompt_ref.to_string();
+
   // println!("{lan_code:?} {file_names:?} {root_dir:?} {indentation_number:?}");
 
   let root_dir_path = Path::new(&root_dir);
@@ -101,15 +99,12 @@ async fn main() {
           continue;
         }
 
-        let formatted_prompt = prompt.replace("REQUIRED_KEY_VALUE_PAIRS", required_pairs.join(",").as_str()).replace("LANGUAGE_CODE", dir_name);
-        // println!("formatted prompt: {:?}", formatted_prompt);
-
         // sleep here for preventing 503 error from gemini request
         if sleep_time_in_second != 0 {
           sleep(Duration::from_secs(sleep_time_in_second)).await;
         }
 
-        let result = http::post_call(formatted_prompt).await;
+        let result = http::post_method(required_pairs, dir_name.to_string()).await;
         let dictionary = match helper::parse_json_response_as_hashmap(result) {
           Ok(val) => val,
           Err(e) => {

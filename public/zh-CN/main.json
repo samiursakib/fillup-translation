@@ -1,7 +1,0 @@
-{
-  "init_project": "开始一个新项目",
-  "clone_repo": "将仓库克隆到你的电脑",
-  "create_branch": "为你的工作创建一个新分支",
-  "commit_changes": "用消息保存你的工作",
-  "push_code": "将你的代码上传到 GitHub"
-}
