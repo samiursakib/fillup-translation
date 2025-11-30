@@ -47,9 +47,10 @@ struct GeminiResponse {
 async fn main() {
   dotenv::dotenv().ok();
   let app_env = env::var("APP_ENV").unwrap_or(String::from("development"));
+  let binding_port = env::var("BINDING_PORT").unwrap_or(String::from("8080"));
   let proxy_url = match app_env.as_str() {
-    "production" => env::var("PROXY_URL_PROD").unwrap_or(String::new()),
-    _ => env::var("PROXY_URL_DEV").unwrap_or(String::new()),
+    "production" => format!("{}:{}", env::var("PROXY_URL_PROD").unwrap_or(String::new()), binding_port),
+    _ => format!("{}:{}", env::var("PROXY_URL_DEV").unwrap_or(String::new()), binding_port),
   };
   let listener = match TcpListener::bind(proxy_url) {
     Ok(val) => val,
