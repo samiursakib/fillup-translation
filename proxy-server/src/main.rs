@@ -1,4 +1,4 @@
-use std::{env, io::{BufRead, BufReader, Read, Write}, net::{TcpListener, TcpStream}};
+use std::{env, io::{BufRead, BufReader, Read, Write}, net::{TcpListener, TcpStream}, process};
 use dotenv;
 use serde::{Deserialize, Serialize};
 
@@ -46,7 +46,19 @@ struct GeminiResponse {
 #[tokio::main]
 async fn main() {
   dotenv::dotenv().ok();
-  let listener = TcpListener::bind("127.0.0.1:4000").unwrap();
+  let app_env = env::var("APP_ENV").unwrap_or(String::from("development"));
+  let proxy_url = match app_env.as_str() {
+    "production" => env::var("PROXY_URL_PROD").unwrap_or(String::new()),
+    _ => env::var("PROXY_URL_DEV").unwrap_or(String::new()),
+  };
+  let listener = match TcpListener::bind(proxy_url) {
+    Ok(val) => val,
+    Err(e) => {
+      eprintln!("Error occurred: {e:#?}.\nApplication shutting down.");
+      process::exit(1);
+    }
+  };
+
   for stream in listener.incoming() {
     let stream = stream.unwrap();
 
