@@ -1,7 +1,0 @@
-{
-  "init_project": "Start a new project",
-  "clone_repo": "Copy the repo to your computer",
-  "create_branch": "Make a new branch for your work",
-  "commit_changes": "Save your work with a message",
-  "push_code": "Upload your code to GitHub"
-}

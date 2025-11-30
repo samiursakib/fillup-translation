@@ -1,69 +1,24 @@
-use std::{env};
-use serde::{Deserialize, Serialize};
+use serde::{Serialize};
 
-#[derive(Serialize)]
-struct BodyPart {
-  text: String,
+#[derive(Serialize, Debug)]
+struct ProxyRequest {
+  required_pairs: Vec<String>,
+  dir_name: String,
 }
 
-#[derive(Serialize)]
-struct BodyContent {
-  parts: Vec<BodyPart>,
-}
-
-#[derive(Serialize)]
-struct GeminiRequest {
-  contents: Vec<BodyContent>,
-}
-
-#[derive(Deserialize, Debug)]
-struct ResponsePart {
-  text: String,
-}
-
-#[derive(Deserialize, Debug)]
-struct ResponseContent {
-  parts: Vec<ResponsePart>,
-}
-
-#[derive(Deserialize, Debug)]
-struct ResponseCandidate {
-  content: ResponseContent,
-}
-
-#[derive(Deserialize, Debug)]
-struct GeminiResponse {
-  candidates: Vec<ResponseCandidate>,
-}
-
-pub async fn post_call(prompt: String) -> Result<String, reqwest::Error> {
-  // println!("entered post call");
-  let gemini_url = env::var("GEMINI_URL").unwrap_or_else(|_| String::new());
-  let gemini_api_key = env::var("GEMINI_API_KEY").unwrap_or_else(|_| String::new());
-  let body = GeminiRequest {
-    contents: vec![
-      BodyContent {
-        parts: vec![
-          BodyPart { text: prompt }
-        ]
-      }
-    ]
-  };
+pub async fn post_method(required_paris: Vec<String>, dir_name: String) -> Result<String, reqwest::Error> {
   let client = reqwest::Client::new();
-  let response = client.post(gemini_url)
-    .header("x-goog-api-key", gemini_api_key)
+  let body = ProxyRequest {
+    required_pairs: required_paris,
+    dir_name: dir_name,
+  };
+  println!("client payload: {body:#?}");
+  let response = client.post("http://localhost:4000")
     .json(&body)
     .send()
-    .await?
-    .error_for_status()?;
-  // println!("{:?}", response);
-
-  let result: GeminiResponse = response.json().await?;
-  let answer = result.candidates.get(0)
-    .and_then(|c| c.content.parts.get(0))
-    .map(|p| p.text.clone())
-    .unwrap_or_else(|| String::new());
-
-  // println!("\napi response: {:?}", answer);
-  Ok(answer)
+    .await?;
+  eprintln!("client response: {response:#?}");
+  let result = response.text().await?;
+  eprintln!("text result: {result:#?}");
+  Ok(result)
 }
