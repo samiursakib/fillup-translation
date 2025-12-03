@@ -63,7 +63,6 @@ async fn main() {
   for stream in listener.incoming() {
     let stream = stream.unwrap();
 
-    println!("connection established: {:#?}", stream);
     println!("Connected");
     handle_connection(stream).await;
   }
@@ -89,11 +88,8 @@ async fn handle_connection(mut stream: TcpStream) {
         }
 
         if header_line.to_lowercase().starts_with("content-length:") {
-          println!("header_line: {header_line:#?}");
           if let Some(len_string) = header_line.split(":").nth(1) {
-            println!("len_string: {len_string:#?}");
             if let Ok(len_num) = len_string.trim().parse::<usize>() {
-              println!("len_num: {len_num:#?}");
               content_length = len_num;
             }
           }
@@ -104,26 +100,26 @@ async fn handle_connection(mut stream: TcpStream) {
     }
   }
 
+  let empty_string = String::new();
+  let request_info = header_lines.iter().nth(0).unwrap_or(&empty_string);
+  let request_path = request_info.split(" ").nth(1).unwrap_or("");
+  if request_path != "/api/translate" {
+    stream.write_all(format!("HTTP/1.1 404 Not Found\r\n\r\n").as_bytes()).unwrap();
+    return;
+  }
+
   let mut buffer = vec![0; content_length];
-  println!("content_length: {content_length:#?}");
   if content_length > 0 {
     if buf_reader.read_exact(&mut buffer).is_err() {
-      eprintln!("Error during reading body");
       return;
     }
     payload_string = String::from_utf8_lossy(&buffer).to_string();
-    println!("payload_string {payload_string:#?}");
   }
-  println!("headers: {header_lines:#?}");
-  println!("payload string: {payload_string:#?}");
   let payload_json: ProxyRequest = conversion_string_to_json(&payload_string).unwrap_or(ProxyRequest { required_pairs: vec![], dir_name: String::new() });
-  println!("body: {payload_json:#?}");
 
   let formatted_prompt = prompt.replace("REQUIRED_KEY_VALUE_PAIRS", payload_json.required_pairs.join(",").as_str()).replace("LANGUAGE_CODE", &payload_json.dir_name);
-  println!("formatted prompt: {:?}", formatted_prompt);
 
   let gemini_response = post_call(formatted_prompt).await;
-  // println!("gemini_respone: {gemini_response:#?}");
   let response = match gemini_response {
     Ok(gemini_result) => format!("HTTP/1.1 200 OK\r\n\r\n{}", gemini_result),
     Err(e) => {
@@ -131,12 +127,10 @@ async fn handle_connection(mut stream: TcpStream) {
       format!("HTTP/1.1 500 Internal Server Error\r\n\r\n")
     }
   };
-  println!("proxy server response: {response:#?}");
   stream.write_all(response.as_bytes()).unwrap();
 }
 
 pub async fn post_call(prompt: String) -> Result<String, reqwest::Error> {
-  // println!("entered post call");
   let gemini_url = env::var("GEMINI_URL").unwrap_or_else(|_| String::new());
   let gemini_api_key = env::var("GEMINI_API_KEY").unwrap_or_else(|_| String::new());
   let body = GeminiRequest {
@@ -155,7 +149,6 @@ pub async fn post_call(prompt: String) -> Result<String, reqwest::Error> {
     .send()
     .await?
     .error_for_status()?;
-  // println!("{:?}", response);
 
   let result: GeminiResponse = response.json().await?;
   let answer = result.candidates.get(0)
@@ -163,7 +156,6 @@ pub async fn post_call(prompt: String) -> Result<String, reqwest::Error> {
     .map(|p| p.text.clone())
     .unwrap_or_else(|| String::new());
 
-  // println!("\napi response: {:?}", answer);
   Ok(answer)
 }
 

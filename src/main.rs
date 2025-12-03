@@ -26,8 +26,6 @@ async fn main() {
   let indentation_number = parsed_cli.indent.unwrap_or_else(|| 4);
   let sleep_time_in_second = parsed_cli.sleep.unwrap_or_else(|| 0);
 
-  // println!("{lan_code:?} {file_names:?} {root_dir:?} {indentation_number:?}");
-
   let root_dir_path = Path::new(&root_dir);
   if !root_dir_path.exists() {
     eprintln!("Path {} does not exist.", &root_dir);
@@ -53,16 +51,11 @@ async fn main() {
         }
       };
 
-      // println!("Content of the reference file:");
       let reference_lines = reference_content.lines().collect::<Vec<_>>();
-      // println!("{:#?}\n", reference_lines);
-
-      // println!("Content of the files to modify:");
       let filepaths_to_modify = match helper::read_public_folder(&root_dir, &reference_filepath) {
         Ok(val) => { val },
         Err(_) => { vec![] }
       };
-      // println!("filepaths_to_modify {:#?}", filepaths_to_modify);
 
       for path in filepaths_to_modify {
         let dir_name = match Path::new(&path).parent() {
@@ -77,7 +70,6 @@ async fn main() {
           Err(_) => { String::new() }
         };
         let lns = content.lines().collect::<Vec<_>>();
-        // println!("\nlns: {:#?}", lns);
 
         let mut required_pairs: Vec<String> = vec![];
 
@@ -113,7 +105,6 @@ async fn main() {
             continue;
           }
         };
-        // println!("HashMap: {:?}", dictionary);
 
         for i in 0..reference_lines.len() {
           let tl = reference_lines[i].replace(",", "");
@@ -121,7 +112,6 @@ async fn main() {
 
           let pair = tl.split(":").collect::<Vec<_>>();
           let target_key = helper::retrieve_key(pair[0]).unwrap_or_else(|| "");
-          // println!("{:?}: {:?} {:?}", i, target_key, lns.contains(&tl));
           let key_exists_in_lns = lns.iter().any(|ln| ln.contains(target_key));
           if key_exists_in_lns {
             if let Some(existing_line) = lns.iter().find(|ln| ln.contains(target_key)) {
@@ -129,13 +119,11 @@ async fn main() {
             }
           } else {
             let translated_value = dictionary.get(target_key).map(|s| s.as_str()).unwrap_or("");
-            // println!("translated_value: {:?}", translated_value);
             generated_content.push(format!("\"{}\": \"{}\"", target_key, translated_value));
           }
         }
         let indented_content = generated_content.iter().map(|ln| format!("{}{}", " ".repeat(indentation_number), ln.trim())).collect::<Vec<_>>().join(",\n");
         let finalized_content = format!("{{\n{}\n}}\n", indented_content);
-        // println!("\nFinalized content: {:#?}", finalized_content);
         let _ = fs::write(&path, finalized_content);
         println!("Done");
       }
@@ -149,6 +137,3 @@ async fn main() {
 
   println!("\nAll translations completed!");
 }
-
-// to delete all contents in files except files in folder en
-// find public -type f ! -path "public/en/*" -exec sh -c '> "$1"' _ {} \;

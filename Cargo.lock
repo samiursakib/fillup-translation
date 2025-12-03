@@ -219,6 +219,7 @@ name = "filltra"
 version = "0.1.0"
 dependencies = [
  "clap",
+ "dotenv",
  "reqwest",
  "serde",
  "serde_json",
