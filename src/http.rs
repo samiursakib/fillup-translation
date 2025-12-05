@@ -16,10 +16,8 @@ pub async fn post_method(required_paris: Vec<String>, dir_name: String) -> Resul
     required_pairs: required_paris,
     dir_name: dir_name,
   };
-  let request_url = match env::var("APP_ENV").unwrap_or(String::from("development")).as_str() {
-    "production" => format!("{}/api/translate", env::var("REQUEST_URL_PROD").unwrap_or(String::new())),
-    _ => format!("{}:{}/api/translate", env::var("REQUEST_URL_DEV").unwrap_or(String::new()), env::var("BINDING_PORT").unwrap_or(String::new()))
-  };
+  // let request_url = format!("http://localhost:8080/api/translate");
+  let request_url = "https://fillup-translation.onrender.com/api/translate";
   let response = client.post(request_url)
     .json(&body)
     .send()
