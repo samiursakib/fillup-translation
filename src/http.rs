@@ -1,6 +1,4 @@
-use std::env;
 use dotenv;
-
 use serde::{Serialize};
 
 #[derive(Serialize, Debug)]
@@ -16,7 +14,7 @@ pub async fn post_method(required_paris: Vec<String>, dir_name: String) -> Resul
     required_pairs: required_paris,
     dir_name: dir_name,
   };
-  // let request_url = format!("http://localhost:8080/api/translate");
+
   let request_url = "https://fillup-translation.onrender.com/api/translate";
   let response = client.post(request_url)
     .json(&body)

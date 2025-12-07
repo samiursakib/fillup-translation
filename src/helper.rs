@@ -33,9 +33,7 @@ pub fn retrieve_key(s: &str) -> Option<&str> {
 }
 
 pub fn parse_json_response_as_hashmap(result: Result<String, reqwest::Error>) -> Result<HashMap<String, String>, Box<dyn Error>> {
-    // reqwest::Error implements Error, so the ? operator works to convert it to Box<dyn Error>
     let json_string = result?;
-    // serde_json::Error also implements Error, so the ? operator works
     let dictionary: HashMap<String, String> = serde_json::from_str(&json_string)?;
     Ok(dictionary)
 }
