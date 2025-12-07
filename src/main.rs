@@ -4,7 +4,8 @@ mod cli;
 
 use std::{fs, path::Path, time::Duration};
 use clap::Parser;
-use tokio::time::{sleep};
+use tokio::{io, time::sleep};
+use tokio::io::AsyncWriteExt;
 
 #[tokio::main]
 async fn main() {
@@ -62,7 +63,9 @@ async fn main() {
           Some(val) => val.as_os_str().to_str().unwrap_or_else(|| "").split("/").collect::<Vec<&str>>().last().unwrap_or_else(|| &""),
           _ => ""
         };
-        println!("on {:?}", dir_name);
+
+        eprint!("On {:?} ... ", dir_name);
+        io::stdout().flush().await.expect("Failed to flush stdout");
 
         let mut generated_content: Vec<String> = vec![];
         let content = match fs::read_to_string(&path) {
@@ -86,12 +89,13 @@ async fn main() {
           }
         }
 
+
         if required_pairs.is_empty() {
-          println!("Already synced!");
+          print!("\r\x1B[K");
+          println!("✅ Already synced on {:?}", dir_name);
           continue;
         }
 
-        // sleep here for preventing 503 error from gemini request
         if sleep_time_in_second != 0 {
           sleep(Duration::from_secs(sleep_time_in_second)).await;
         }
@@ -100,7 +104,8 @@ async fn main() {
         let dictionary = match helper::parse_json_response_as_hashmap(result) {
           Ok(val) => val,
           Err(e) => {
-            eprintln!("Failed to translate: {:?}", e);
+            print!("\r\x1B[K");
+            println!("❌ Failed to translate on {:?}: {:?}", dir_name, e);
             failed_task_count = failed_task_count + 1;
             continue;
           }
@@ -125,12 +130,13 @@ async fn main() {
         let indented_content = generated_content.iter().map(|ln| format!("{}{}", " ".repeat(indentation_number), ln.trim())).collect::<Vec<_>>().join(",\n");
         let finalized_content = format!("{{\n{}\n}}\n", indented_content);
         let _ = fs::write(&path, finalized_content);
-        println!("Done");
+        print!("\r\x1B[K");
+        println!("✅ Done on {:?}", dir_name);
       }
     }
 
     if failed_task_count == 0 { break; }
-    println!("\nSome translations failed. Wanna resolve those?\nType yes/y to continue and no/n to exit");
+    eprint!("\nSome translations failed. Wanna resolve those? [Y/n] ");
     let answer = cli::ask_user();
     if answer == "n" { break; }
   }
